@@ -1,3 +1,11 @@
+class Cliente {
+  constructor(
+    public nome: string,
+    public cpf: string,
+    public tipoCarteira: string
+  ) {}
+}
+
 class Veiculo {
   constructor(
     public placa: string,
@@ -114,5 +122,6 @@ locadora.alugarVeiculo("YWK-1223");
 locadora.listarVeiculosDisponiveis();
 
 locadora.devolverVeiculo("1");
+locadora.devolverVeiculo("PPX-5487");
 
 locadora.listarVeiculosDisponiveis();

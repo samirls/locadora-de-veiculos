@@ -1,3 +1,11 @@
+var Cliente = /** @class */ (function () {
+    function Cliente(nome, cpf, tipoCarteira) {
+        this.nome = nome;
+        this.cpf = cpf;
+        this.tipoCarteira = tipoCarteira;
+    }
+    return Cliente;
+}());
 var Veiculo = /** @class */ (function () {
     function Veiculo(placa, modelo, marca, valorHoraAluguel, disponivel) {
         if (disponivel === void 0) { disponivel = true; }
@@ -105,4 +113,5 @@ locadora.alugarVeiculo("LLD-5391");
 locadora.alugarVeiculo("YWK-1223");
 locadora.listarVeiculosDisponiveis();
 locadora.devolverVeiculo("1");
+locadora.devolverVeiculo("PPX-5487");
 locadora.listarVeiculosDisponiveis();
