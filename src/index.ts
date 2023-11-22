@@ -38,14 +38,9 @@ class Locadora {
   private veiculos: Veiculo[] = [];
 
   cadastrarVeiculo(veiculo: Veiculo): void {
-    let veiculoExistente = false;
+  
+    const veiculoExistente = this.veiculos.find((v) => v.placa === veiculo.placa);
 
-    for (const v of this.veiculos) {
-      if (v.placa === veiculo.placa) {
-        veiculoExistente = true;
-        break;
-      }
-    }
 
     if (veiculoExistente) {
       console.log(`Veículo com a placa ${veiculo.placa} já está cadastrado.`);
@@ -66,15 +61,9 @@ class Locadora {
   }
 
   alugarVeiculo(placa: string): void {
-    let veiculoEncontrado: Veiculo | undefined;
-
-    for (const veiculo of this.veiculos) {
-      if (veiculo.placa === placa) {
-        veiculoEncontrado = veiculo;
-        break;
-      }
-    }
-
+     
+    const veiculoEncontrado = this.veiculos.find(veiculo => veiculo.placa === placa);
+ 
     if (veiculoEncontrado) {
       veiculoEncontrado.alugar();
     } else {
@@ -83,15 +72,8 @@ class Locadora {
   }
 
   devolverVeiculo(placa: string): void {
-    let veiculoEncontrado: Veiculo | undefined;
-
-    for (const veiculo of this.veiculos) {
-      if (veiculo.placa === placa) {
-        veiculoEncontrado = veiculo;
-        break;
-      }
-    }
-
+    const veiculoEncontrado = this.veiculos.find(veiculo => veiculo.placa === placa);
+ 
     if (veiculoEncontrado) {
       veiculoEncontrado.devolver();
     } else {
