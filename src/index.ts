@@ -93,15 +93,33 @@ class Locadora {
     }
   }
 
-  devolverVeiculo(placa: string): void {
+  devolverVeiculo(placa: string, cpf: string): void {
     const veiculoEncontrado = this.veiculos.find(veiculo => veiculo.placa === placa);
- 
-    if (veiculoEncontrado) {
+  
+    if (veiculoEncontrado && veiculoEncontrado.usuario && veiculoEncontrado.usuario.cpf === cpf) {
       veiculoEncontrado.devolver();
+      console.log(`Veículo ${placa} devolvido com sucesso pelo CPF: ${cpf}`);
+    } else if (veiculoEncontrado && !veiculoEncontrado.usuario) {
+      console.log(`Veículo ${placa} não está alugado no momento.`);
     } else {
-      console.log("Veículo não encontrado.");
+      console.log(`Veículo ${placa} não encontrado ou o CPF ${cpf} não corresponde ao locatário.`);
     }
   }
+
+  excluirVeiculo(placa: string): void {
+    const veiculoEncontrado = this.veiculos.find(veiculo => veiculo.placa === placa);
+    
+    if (veiculoEncontrado) {
+      if (!veiculoEncontrado.disponivel) {
+        console.log("Veículo está sendo usado e não pode ser excluído!");
+      } else {
+        this.veiculos = this.veiculos.filter(veiculo => veiculo.placa !== placa);
+        console.log(`Veículo ${placa} removido com sucesso.`);
+      }
+    } else {
+      console.log("Veículo não encontrado!");
+    }
+  }  
 }
 
 // Exemplo de uso //////////////////////////////////////////////////////
@@ -128,10 +146,13 @@ locadora.alugarVeiculo("PPX-5487",cliente1);
 locadora.alugarVeiculo("LLD-5391",cliente2); 
 locadora.alugarVeiculo("YWK-1223",cliente1);
 
+locadora.excluirVeiculo("LLD-5391");
+
 
 locadora.listarVeiculosDisponiveis();
 
-locadora.devolverVeiculo("1");
-locadora.devolverVeiculo("PPX-5487");
+locadora.devolverVeiculo("PPX-5487",cliente1.cpf); // Aponta como não alugado (correto)
+locadora.devolverVeiculo("YWK-1223",cliente2.cpf); // Aponta como não alugado (correto)
+locadora.devolverVeiculo("LLD-5391",cliente2.cpf); // Devolve com sucesso (correto)
 
 locadora.listarVeiculosDisponiveis();
