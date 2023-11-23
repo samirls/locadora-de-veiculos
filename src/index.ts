@@ -2,9 +2,22 @@ import Cliente from "./classes/Cliente";
 import Veiculo from "./classes/Veiculo";
 import Locadora from "./classes/Locadora";
 import * as readlineSync from "readline-sync";
+import Aluguel from "./classes/aluguel";
 
 // CLI - Command Line Interface //////////////////////////////////////////////////////
 const locadora = new Locadora();
+
+locadora.cadastrarVeiculo(new Veiculo("AAA1234", "Sedan", "Fiat", 100, true, "A"));
+locadora.cadastrarVeiculo(new Veiculo("BBB1234", "Uno", "Fiat", 100, true, "A"));
+locadora.cadastrarVeiculo(new Veiculo("CCC1234", "Palio", "Fiat", 100, true, "A"));
+
+locadora.cadastrarCliente(new Cliente("João", "11111111111", "A"));
+locadora.cadastrarCliente(new Cliente("Maria", "22222222222", "A"));
+locadora.cadastrarCliente(new Cliente("José", "33333333333", "A"));
+
+locadora.alugarVeiculo("AAA1234", "11111111111");
+locadora.alugarVeiculo("BBB1234", "22222222222");
+locadora.alugarVeiculo("CCC1234", "33333333333");
 
 function main(): void {
   console.log(`
@@ -16,8 +29,10 @@ function main(): void {
   console.log("1 - Cadastrar Veículo");
   console.log("2 - Cadastrar Cliente");
   console.log("3 - Listar Veículos");
-  console.log("4 - Alugar Veículo");
-  console.log("5 - Devolver Veículo");
+  console.log("4 - Listar Clientes")
+  console.log("5 - Listar Aluguéis");
+  console.log("6 - Alugar Veículo");
+  console.log("7 - Devolver Veículo");
   console.log("Pressione qualquer outra tecla para sair da aplicação.\x1b[0m");
 
   let userInput: number = parseInt(readlineSync.question("Digite: "));
@@ -32,21 +47,27 @@ function main(): void {
     case 3:
       listarVeiculosDisponiveis();
       break;
-    case 4:
-      alugarVeiculo();
+    case 4: 
+      listarClientes();
       break;
     case 5:
-      devolverVeiculo();
+      listarAlugueis();
       break;
+    case 6:
+      alugarVeiculo();
+      break;
+    case 7:
+      devolverVeiculo();
+      break;  
     default:
       console.log("\x1b[31mSaindo do aplicativo.\x1b[0m");
   }
 }
 
 function cadastrarVeiculo() {
-  let placa: string = readlineSync.question("Digite a placa: ");
-  let modelo: string = readlineSync.question("Digite o modelo: ");
-  let marca: string = readlineSync.question("Digite a marca: ");
+  let placa: string = readlineSync.question("Digite a placa: (ex: AAA1234) ");
+  let modelo: string = readlineSync.question("Digite o modelo: (ex: Sedan) ");
+  let marca: string = readlineSync.question("Digite a marca: (ex: Fiat) ");
   let valorHoraAluguel: number = parseInt(readlineSync.question("Digite o valor da hora de aluguel: "));
   let carteiraNecessaria: string = readlineSync.question("Digite a habilitação necessária para conduzir o veículo, se A ou B: ");
   
@@ -56,7 +77,6 @@ function cadastrarVeiculo() {
     marca,
     valorHoraAluguel,
     true,
-    null,
     carteiraNecessaria.toUpperCase()
   );
   locadora.cadastrarVeiculo(veiculo);
@@ -77,7 +97,7 @@ function alugarVeiculo() {
   const cliente = locadora.buscarCliente(cpfCliente);
 
   if (cliente) {
-    locadora.alugarVeiculo(placa.toUpperCase(), cliente, parseInt(qtdDiasContratados));
+    locadora.alugarVeiculo(placa.toUpperCase(), cliente.cpf);
 
   } else {
     console.log("\x1b[31mCliente com o CPF " + cpfCliente + " não encontrado.\x1b[0m");
@@ -93,15 +113,24 @@ function cadastrarCliente() {
 
   const cliente = new Cliente(nome, cpf, tipoCarteira.toUpperCase());
   locadora.cadastrarCliente(cliente);
-  console.log(`\x1b[32mCliente cadastrado com sucesso: ${nome} - ${cpf}\x1b[0m`);
   main();
 }
 
 function devolverVeiculo() {
-  let placa: string = readlineSync.question("Digite a placa do veículo a ser devolvido: ");
+  // let placa: string = readlineSync.question("Digite a placa do veículo a ser devolvido: ");
   let cpfCliente: string = readlineSync.question("Digite o CPF do cliente que está devolvendo: ");
 
-  locadora.devolverVeiculo(placa.toUpperCase(), cpfCliente);
+  locadora.devolverVeiculo(cpfCliente);
+  main();
+}
+
+function listarClientes() {
+  locadora.listarClientes();
+  main();
+}
+
+function listarAlugueis() {
+  locadora.listarAlugueis();
   main();
 }
 
