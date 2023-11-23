@@ -3,6 +3,7 @@ import Cliente from "./cliente";
 
 class Locadora {
   private veiculos: Veiculo[] = [];
+  private clientes: Cliente[] = [];
 
   cadastrarVeiculo(veiculo: Veiculo): void {
   
@@ -14,6 +15,21 @@ class Locadora {
       this.veiculos.push(veiculo);
       console.log(`Veículo ${veiculo.modelo} cadastrado com sucesso.`);
     }
+  }
+
+  cadastrarCliente(cliente: Cliente): void {
+    const clienteExistente = this.clientes.find((c) => c.cpf === cliente.cpf);
+
+    if (clienteExistente) {
+      console.log(`Cliente com o CPF ${cliente.cpf} já está cadastrado.`);
+    } else {
+      this.clientes.push(cliente);
+      console.log(`Cliente ${cliente.nome} cadastrado com sucesso.`);
+    }
+  }
+
+  buscarCliente(cpf: string): Cliente | undefined {
+    return this.clientes.find((cliente) => cliente.cpf === cpf);
   }
 
   listarVeiculosDisponiveis(): void {
@@ -43,11 +59,11 @@ class Locadora {
   
     if (veiculoEncontrado && veiculoEncontrado.usuario && veiculoEncontrado.usuario.cpf === cpf) {
       veiculoEncontrado.devolver();
-      console.log(`Veículo ${placa} devolvido com sucesso pelo CPF: ${cpf}`);
+      console.log(`Veiculo ${placa} devolvido com sucesso pelo CPF: ${cpf}`);
     } else if (veiculoEncontrado && !veiculoEncontrado.usuario) {
-      console.log(`Veículo ${placa} não está alugado no momento.`);
+      console.log(`Veiculo ${placa} não está alugado no momento.`);
     } else {
-      console.log(`Veículo ${placa} não encontrado ou o CPF ${cpf} não corresponde ao locatário.`);
+      console.log(`Veiculo ${placa} não encontrado ou o CPF ${cpf} nao corresponde ao locatario.`);
     }
   }
 
@@ -56,13 +72,13 @@ class Locadora {
     
     if (veiculoEncontrado) {
       if (!veiculoEncontrado.disponivel) {
-        console.log("Veículo está sendo usado e não pode ser excluído!");
+        console.log("Veiculo está sendo usado e nao pode ser excluido!");
       } else {
         this.veiculos = this.veiculos.filter(veiculo => veiculo.placa !== placa);
-        console.log(`Veículo ${placa} removido com sucesso.`);
+        console.log(`Veiculo ${placa} removido com sucesso.`);
       }
     } else {
-      console.log("Veículo não encontrado!");
+      console.log("Veiculo nao encontrado!");
     }
   }  
 }

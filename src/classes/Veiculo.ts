@@ -8,21 +8,21 @@ class Veiculo {
     public valorHoraAluguel: number,
     public disponivel: boolean = true,
     public usuario: Cliente | null = null,
-    public carteiraNecessario: string
+    public carteiraNecessaria: string
   ) {}
 
   alugar(cliente: Cliente): void {
-    if (this.disponivel && !this.usuario && cliente.tipoCarteira === this.carteiraNecessario && !cliente.estaAlugando()) {
+    if (this.disponivel && !this.usuario && cliente.tipoCarteira === this.carteiraNecessaria && !cliente.estaAlugando()) {
       this.disponivel = false;
       this.usuario = cliente;
-      cliente.alugando = this; // Atualiza o veículo alugado pelo cliente
+      cliente.alugando = this;
       console.log(`Veículo ${this.modelo} alugado por ${this.usuario.nome} com sucesso.`);
     } else if (this.usuario) {
       console.log(`Veículo ${this.modelo} está sendo usado por ${this.usuario.nome}.`);
     } else if (cliente.estaAlugando()) {
       console.log(`Cliente ${cliente.nome} já está alugando um veículo.`);
-    } else if (cliente.tipoCarteira !== this.carteiraNecessario) {
-      console.log(`Veículo ${this.modelo} requer uma carteira do tipo ${this.carteiraNecessario}.`);
+    } else if (cliente.tipoCarteira !== this.carteiraNecessaria) {
+      console.log(`Veículo ${this.modelo} requer uma carteira do tipo ${this.carteiraNecessaria}.`);
     } else {
       console.log(`Veículo ${this.modelo} não está disponível para aluguel para este cliente.`);
     }
