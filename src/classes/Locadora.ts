@@ -6,14 +6,13 @@ class Locadora {
   private clientes: Cliente[] = [];
 
   cadastrarVeiculo(veiculo: Veiculo): void {
-  
     const veiculoExistente = this.veiculos.find((v) => v.placa === veiculo.placa);
 
     if (veiculoExistente) {
-      console.log(`Veículo com a placa ${veiculo.placa} já está cadastrado.`);
+      console.log("\x1b[33m❌ Veículo com a placa " + veiculo.placa + " já está cadastrado.\x1b[0m");
     } else {
       this.veiculos.push(veiculo);
-      console.log(`Veículo ${veiculo.modelo} cadastrado com sucesso.`);
+      console.log("\x1b[32m✅ Veículo " + veiculo.modelo + " cadastrado com sucesso.\x1b[0m");
     }
   }
 
@@ -21,10 +20,10 @@ class Locadora {
     const clienteExistente = this.clientes.find((c) => c.cpf === cliente.cpf);
 
     if (clienteExistente) {
-      console.log(`Cliente com o CPF ${cliente.cpf} já está cadastrado.`);
+      console.log("\x1b[33m❌ Cliente com o CPF " + cliente.cpf + " já está cadastrado.\x1b[0m");
     } else {
       this.clientes.push(cliente);
-      console.log(`Cliente ${cliente.nome} cadastrado com sucesso.`);
+      console.log("\x1b[32m✅ Cliente " + cliente.nome + " cadastrado com sucesso.\x1b[0m");
     }
   }
 
@@ -33,54 +32,50 @@ class Locadora {
   }
 
   listarVeiculosDisponiveis(): void {
-    const veiculosDisponiveis = this.veiculos.filter(
-      (veiculo) => veiculo.disponivel
-    );
-    console.log("Veículos disponíveis:");
+    const veiculosDisponiveis = this.veiculos.filter((veiculo) => veiculo.disponivel);
+    console.log("\x1b[36m✅Veículos disponíveis:\x1b[0m");
     veiculosDisponiveis.forEach((veiculo) =>
-    console.log(`${veiculo.modelo} - ${veiculo.marca} - ${veiculo.placa}`)
+      console.log("\x1b[36m✅" + veiculo.modelo + " - " + veiculo.marca + " - " + veiculo.placa + "\x1b[0m")
     );
   }
 
-  alugarVeiculo(placa: string, cliente: Cliente ): void {
-     
-    const veiculoEncontrado = this.veiculos.find(veiculo => veiculo.placa === placa);
+  alugarVeiculo(placa: string, cliente: Cliente): void {
+    const veiculoEncontrado = this.veiculos.find((veiculo) => veiculo.placa === placa);
 
     if (veiculoEncontrado) {
       veiculoEncontrado.alugar(cliente);
-           
     } else {
-      console.log("Veículo não encontrado.");
+      console.log("\x1b[31m❌ Veículo não encontrado.\x1b[0m");
     }
   }
 
   devolverVeiculo(placa: string, cpf: string): void {
-    const veiculoEncontrado = this.veiculos.find(veiculo => veiculo.placa === placa);
-  
+    const veiculoEncontrado = this.veiculos.find((veiculo) => veiculo.placa === placa);
+
     if (veiculoEncontrado && veiculoEncontrado.usuario && veiculoEncontrado.usuario.cpf === cpf) {
       veiculoEncontrado.devolver();
-      console.log(`Veiculo ${placa} devolvido com sucesso pelo CPF: ${cpf}`);
+      console.log("\x1b[32m✅ Veículo " + placa + " devolvido com sucesso pelo CPF: " + cpf + "\x1b[0m");
     } else if (veiculoEncontrado && !veiculoEncontrado.usuario) {
-      console.log(`Veiculo ${placa} não está alugado no momento.`);
+      console.log("\x1b[31m❌ Veículo " + placa + " não está alugado no momento.\x1b[0m");
     } else {
-      console.log(`Veiculo ${placa} não encontrado ou o CPF ${cpf} nao corresponde ao locatario.`);
+      console.log("\x1b[31m❌ Veículo " + placa + " não encontrado ou o CPF " + cpf + " não corresponde ao locatário.\x1b[0m");
     }
   }
 
   excluirVeiculo(placa: string): void {
-    const veiculoEncontrado = this.veiculos.find(veiculo => veiculo.placa === placa);
-    
+    const veiculoEncontrado = this.veiculos.find((veiculo) => veiculo.placa === placa);
+
     if (veiculoEncontrado) {
       if (!veiculoEncontrado.disponivel) {
-        console.log("Veiculo está sendo usado e nao pode ser excluido!");
+        console.log("\x1b[31m❌ Veículo está sendo usado e não pode ser excluído!\x1b[0m");
       } else {
-        this.veiculos = this.veiculos.filter(veiculo => veiculo.placa !== placa);
-        console.log(`Veiculo ${placa} removido com sucesso.`);
+        this.veiculos = this.veiculos.filter((veiculo) => veiculo.placa !== placa);
+        console.log("\x1b[32m✅ Veículo " + placa + " removido com sucesso.\x1b[0m");
       }
     } else {
-      console.log("Veiculo nao encontrado!");
+      console.log("\x1b[31m❌ Veículo não encontrado!\x1b[0m");
     }
-  }  
+  }
 }
 
 export default Locadora;

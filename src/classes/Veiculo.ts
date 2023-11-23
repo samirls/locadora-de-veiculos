@@ -16,15 +16,15 @@ class Veiculo {
       this.disponivel = false;
       this.usuario = cliente;
       cliente.alugando = this;
-      console.log(`Veículo ${this.modelo} alugado por ${this.usuario.nome} com sucesso.`);
+      console.log(`\x1b[32m🚕 Veículo ${this.modelo} alugado por ${this.usuario.nome} com sucesso.\x1b[0m`);
     } else if (this.usuario) {
-      console.log(`Veículo ${this.modelo} está sendo usado por ${this.usuario.nome}.`);
+      console.log(`\x1b[31m❌ Veículo ${this.modelo} está sendo usado por ${this.usuario.nome}.\x1b[0m`);
     } else if (cliente.estaAlugando()) {
-      console.log(`Cliente ${cliente.nome} já está alugando um veículo.`);
+      console.log(`\x1b[31m❌ Cliente ${cliente.nome} já está alugando um veículo.\x1b[0m`);
     } else if (cliente.tipoCarteira !== this.carteiraNecessaria) {
-      console.log(`Veículo ${this.modelo} requer uma carteira do tipo ${this.carteiraNecessaria}.`);
+      console.log(`\x1b[31m❌ Veículo ${this.modelo} requer uma carteira do tipo ${this.carteiraNecessaria}.\x1b[0m`);
     } else {
-      console.log(`Veículo ${this.modelo} não está disponível para aluguel para este cliente.`);
+      console.log(`\x1b[31m❌ Veículo ${this.modelo} não está disponível para aluguel para este cliente.\x1b[0m`);
     }
   }
 
@@ -32,12 +32,12 @@ class Veiculo {
     if (!this.disponivel) {
       this.disponivel = true;
       const usuarioNome = this.usuario ? this.usuario.nome : 'Desconhecido';
-      console.log(`Veículo ${this.modelo} devolvido por ${usuarioNome} com sucesso.`);
+      console.log(`\x1b[32m🔁 Veículo ${this.modelo} devolvido por ${usuarioNome} com sucesso.\x1b[0m`);
       this.usuario = null;
     } else {
-      console.log(`Veículo ${this.modelo} já está disponível.`);
+      console.log(`\x1b[31m❌ Veículo ${this.modelo} já está disponível.\x1b[0m`);
     }
   }
 }
 
-export default Veiculo
+export default Veiculo;

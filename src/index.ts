@@ -7,22 +7,18 @@ import * as readlineSync from "readline-sync";
 const locadora = new Locadora();
 
 function main(): void {
-  console.log(
-    "################################################################"
-  );
-  console.log(
-    "################## Sistema Locação de Veículos #################"
-  );
-  console.log(
-    "################################################################"
-  );
-  console.log("Escolha uma opção:");
+  console.log(`
+    \x1b[36m################################################################
+    ################## Sistema Locação de Veículos #################
+    ################################################################\x1b[0m
+    `);
+  console.log("\x1b[33mEscolha uma opção:");
   console.log("1 - Cadastrar Veículo");
   console.log("2 - Cadastrar Cliente");
   console.log("3 - Listar Veículos");
   console.log("4 - Alugar Veículo");
   console.log("5 - Devolver Veículo");
-  console.log("Pressione qualquer outra tecla pra sair da aplicação.");
+  console.log("Pressione qualquer outra tecla para sair da aplicação.\x1b[0m");
 
   let userInput: number = parseInt(readlineSync.question("Digite: "));
 
@@ -43,17 +39,16 @@ function main(): void {
       devolverVeiculo();
       break;
     default:
-      console.log("Saindo do aplicativo.");
+      console.log("\x1b[31mSaindo do aplicativo.\x1b[0m");
   }
 }
-
 
 function cadastrarVeiculo() {
   let placa: string = readlineSync.question("Digite a placa: ");
   let modelo: string = readlineSync.question("Digite o modelo: ");
   let marca: string = readlineSync.question("Digite a marca: ");
   let valorHoraAluguel: number = parseInt(readlineSync.question("Digite o valor da hora de aluguel: "));
-  let carteiraNecessaria: string = readlineSync.question("Digite a habilitacao necessaria pra conduzir o veiculo, se A ou B: ");
+  let carteiraNecessaria: string = readlineSync.question("Digite a habilitação necessária para conduzir o veículo, se A ou B: ");
   
   const veiculo = new Veiculo(
     placa,
@@ -65,9 +60,7 @@ function cadastrarVeiculo() {
     carteiraNecessaria
   );
   locadora.cadastrarVeiculo(veiculo);
-  console.log(`Veiculo cadastrado com sucesso: ${modelo} - ${placa}`);
-
-
+  console.log(`\x1b[32mVeículo cadastrado com sucesso: ${modelo} - ${placa}\x1b[0m`);
   main();
 }
 
@@ -85,7 +78,7 @@ function alugarVeiculo() {
   if (cliente) {
     locadora.alugarVeiculo(placa, cliente);
   } else {
-    console.log(`Cliente com o CPF ${cpfCliente} nao encontrado.`);
+    console.log("\x1b[31mCliente com o CPF " + cpfCliente + " não encontrado.\x1b[0m");
   }
 
   main();
@@ -98,19 +91,16 @@ function cadastrarCliente() {
 
   const cliente = new Cliente(nome, cpf, tipoCarteira);
   locadora.cadastrarCliente(cliente);
-  console.log(`Cliente cadastrado com sucesso: ${nome} - ${cpf}`);
+  console.log(`\x1b[32mCliente cadastrado com sucesso: ${nome} - ${cpf}\x1b[0m`);
   main();
 }
 
 function devolverVeiculo() {
-  let placa: string = readlineSync.question("Digite a placa do veiculo a ser devolvido: ");
-  let cpfCliente: string = readlineSync.question("Digite o CPF do cliente que esta devolvendo: ");
+  let placa: string = readlineSync.question("Digite a placa do veículo a ser devolvido: ");
+  let cpfCliente: string = readlineSync.question("Digite o CPF do cliente que está devolvendo: ");
 
   locadora.devolverVeiculo(placa, cpfCliente);
-
   main();
 }
-
-
 
 main();
