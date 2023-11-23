@@ -51,13 +51,13 @@ function cadastrarVeiculo() {
   let carteiraNecessaria: string = readlineSync.question("Digite a habilitação necessária para conduzir o veículo, se A ou B: ");
   
   const veiculo = new Veiculo(
-    placa,
+    placa.toUpperCase(),
     modelo,
     marca,
     valorHoraAluguel,
     true,
     null,
-    carteiraNecessaria
+    carteiraNecessaria.toUpperCase()
   );
   locadora.cadastrarVeiculo(veiculo);
   console.log(`\x1b[32mVeículo cadastrado com sucesso: ${modelo} - ${placa}\x1b[0m`);
@@ -72,11 +72,13 @@ function listarVeiculosDisponiveis() {
 function alugarVeiculo() {
   let placa: string = readlineSync.question("Digite a placa: ");
   let cpfCliente: string = readlineSync.question("Digite o CPF do cliente: ");
+  let qtdDiasContratados: string = readlineSync.question("Digite a quantidade de dias que deseja alugar: ");
 
   const cliente = locadora.buscarCliente(cpfCliente);
 
   if (cliente) {
-    locadora.alugarVeiculo(placa, cliente);
+    locadora.alugarVeiculo(placa.toUpperCase(), cliente, parseInt(qtdDiasContratados));
+
   } else {
     console.log("\x1b[31mCliente com o CPF " + cpfCliente + " não encontrado.\x1b[0m");
   }
@@ -89,7 +91,7 @@ function cadastrarCliente() {
   let cpf: string = readlineSync.question("Digite o CPF do cliente: ");
   let tipoCarteira: string = readlineSync.question("Digite a categoria da carteira do cliente: ");
 
-  const cliente = new Cliente(nome, cpf, tipoCarteira);
+  const cliente = new Cliente(nome, cpf, tipoCarteira.toUpperCase());
   locadora.cadastrarCliente(cliente);
   console.log(`\x1b[32mCliente cadastrado com sucesso: ${nome} - ${cpf}\x1b[0m`);
   main();
@@ -99,7 +101,7 @@ function devolverVeiculo() {
   let placa: string = readlineSync.question("Digite a placa do veículo a ser devolvido: ");
   let cpfCliente: string = readlineSync.question("Digite o CPF do cliente que está devolvendo: ");
 
-  locadora.devolverVeiculo(placa, cpfCliente);
+  locadora.devolverVeiculo(placa.toUpperCase(), cpfCliente);
   main();
 }
 

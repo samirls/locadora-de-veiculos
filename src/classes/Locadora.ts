@@ -39,22 +39,43 @@ class Locadora {
     );
   }
 
-  alugarVeiculo(placa: string, cliente: Cliente): void {
+  alugarVeiculo(placa: string, cliente: Cliente, qtdDiasContratados: number): void {
     const veiculoEncontrado = this.veiculos.find((veiculo) => veiculo.placa === placa);
 
     if (veiculoEncontrado) {
-      veiculoEncontrado.alugar(cliente);
+      if (veiculoEncontrado.disponivel && !veiculoEncontrado.usuario && cliente.tipoCarteira === veiculoEncontrado.carteiraNecessaria && !cliente.estaAlugando()) {
+        veiculoEncontrado.alugar(cliente);
+        const valorDoAluguel = this.calcularValorDoAluguel(veiculoEncontrado, qtdDiasContratados)
+        console.log(`\x1b[32m🚕 Veículo ${veiculoEncontrado.modelo} alugado por ${cliente.nome} com sucesso! Valor do aluguel R$${valorDoAluguel}\x1b[0m`);
+      } else if (veiculoEncontrado.usuario) {
+        console.log(`\x1b[31m❌ Veículo ${veiculoEncontrado.modelo} está sendo usado por ${veiculoEncontrado.usuario.nome}.\x1b[0m`);
+      } else if (cliente.estaAlugando()) {
+        console.log(`\x1b[31m❌ Cliente ${cliente.nome} já está alugando um veículo.\x1b[0m`);
+      } else if (cliente.tipoCarteira !== veiculoEncontrado.carteiraNecessaria) {
+        console.log(`\x1b[31m❌ Veículo ${veiculoEncontrado.modelo} requer uma carteira do tipo ${veiculoEncontrado.carteiraNecessaria}.\x1b[0m`);
+      } else {
+        console.log(`\x1b[31m❌ Veículo ${veiculoEncontrado.modelo} não está disponível para aluguel para este cliente.\x1b[0m`);
+      }
     } else {
       console.log("\x1b[31m❌ Veículo não encontrado.\x1b[0m");
     }
+  }
+
+  calcularValorDoAluguel(veiculoAlugado: Veiculo, qtdDiasContratados: number): number {
+    const valorDoAluguelPorDia = veiculoAlugado.valorHoraAluguel * 24
+    return valorDoAluguelPorDia * qtdDiasContratados
   }
 
   devolverVeiculo(placa: string, cpf: string): void {
     const veiculoEncontrado = this.veiculos.find((veiculo) => veiculo.placa === placa);
 
     if (veiculoEncontrado && veiculoEncontrado.usuario && veiculoEncontrado.usuario.cpf === cpf) {
-      veiculoEncontrado.devolver();
-      console.log("\x1b[32m✅ Veículo " + placa + " devolvido com sucesso pelo CPF: " + cpf + "\x1b[0m");
+      if (!veiculoEncontrado.disponivel) {
+        veiculoEncontrado.devolver();
+        console.log("\x1b[32m✅ Veículo " + placa + " devolvido com sucesso pelo CPF: " + cpf + "\x1b[0m");
+      } else {
+        console.log(`\x1b[31m❌ Veículo ${veiculoEncontrado.modelo} já está disponível.\x1b[0m`);
+      }
     } else if (veiculoEncontrado && !veiculoEncontrado.usuario) {
       console.log("\x1b[31m❌ Veículo " + placa + " não está alugado no momento.\x1b[0m");
     } else {
