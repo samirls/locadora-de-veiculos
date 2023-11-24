@@ -72,23 +72,27 @@ class Locadora {
     const clienteAlugar = this.buscarCliente(cpf);
 
     if (veiculoAlugar && clienteAlugar){
-      if (veiculoAlugar.disponivel && veiculoAlugar.disponivel && clienteAlugar.tipoCarteira === veiculoAlugar.carteiraNecessaria && !clienteAlugar.estaAlugando()) {
+      if (veiculoAlugar.disponivel && 
+          clienteAlugar.tipoCarteira === veiculoAlugar.carteiraNecessaria && 
+          !clienteAlugar.estaAlugando()) {
         const novoAluguel = new Aluguel(veiculoAlugar, clienteAlugar);
         this.alugueis.push(novoAluguel);
         console.log(`\x1b[32m🚕 Veículo ${veiculoAlugar.modelo} alugado por ${clienteAlugar.nome} com sucesso! Valor da hora contratada R$${veiculoAlugar.valorHoraAluguel}\x1b[0m`);
       } else if (!veiculoAlugar.disponivel) {
-        console.log(`\x1b[31m❌ Veículo ${veiculoAlugar.modelo} está alugado.\x1b[0m`);
+        console.log(`\x1b[31m❌ Veículo ${veiculoAlugar.modelo} não está disponível para aluguel.\x1b[0m`);
       } else if (clienteAlugar.estaAlugando()) {
         console.log(`\x1b[31m❌ Cliente ${clienteAlugar.nome} já está alugando um veículo.\x1b[0m`);
       } else if (clienteAlugar.tipoCarteira !== veiculoAlugar.carteiraNecessaria) {
         console.log(`\x1b[31m❌ Veículo ${veiculoAlugar.modelo} requer uma carteira do tipo ${veiculoAlugar.carteiraNecessaria}.\x1b[0m`);
-      } else {
-        console.log(`\x1b[31m❌ Veículo ${veiculoAlugar.modelo} não está disponível para aluguel para este cliente.\x1b[0m`);
+      } else if (!veiculoAlugar) {
+        console.log("\x1b[31m❌ Veículo não encontrado.\x1b[0m");
+      } else if (!clienteAlugar) {
+        console.log("\x1b[31m❌ Cliente não encontrado.\x1b[0m");
       }
-    } else {
-      console.log("\x1b[31m❌ Veículo não encontrado.\x1b[0m");
-    }
-  }
+       else {
+        console.log(`\x1b[31m❌ Veículo ${veiculoAlugar.modelo} não está disponível para aluguel para este cliente.\x1b[0m`);
+      } 
+  }}
 
   calcularValorDoAluguel(veiculoAlugado: Veiculo, qtdDiasContratados: number): number {
     const valorDoAluguelPorDia = veiculoAlugado.valorHoraAluguel * 24

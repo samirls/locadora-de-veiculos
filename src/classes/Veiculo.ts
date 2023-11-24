@@ -1,5 +1,3 @@
-import Locadora from "./Locadora";
-
 class Veiculo {
   constructor(
     public placa: string,

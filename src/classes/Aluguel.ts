@@ -10,7 +10,10 @@ class Aluguel {
         private _veiculo: Veiculo,
         private _cliente: Cliente,
         private _dataFim: Date | null = null,
-    ) {}
+    ) {
+        _veiculo.disponivel = false;
+        _cliente.alugando = this.veiculo;
+    }
 
     get veiculo() {
         return this._veiculo;
