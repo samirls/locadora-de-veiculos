@@ -28,7 +28,7 @@ function main(): void {
   console.log("\x1b[33mEscolha uma opção:");
   console.log("1 - Cadastrar Veículo");
   console.log("2 - Cadastrar Cliente");
-  console.log("3 - Listar Veículos");
+  console.log("3 - Listar Veículos Disponíveis");
   console.log("4 - Listar Clientes")
   console.log("5 - Listar Aluguéis");
   console.log("6 - Alugar Veículo");
@@ -64,24 +64,54 @@ function main(): void {
   }
 }
 
+function checkPlaca(placa: string): boolean {
+  if (!/^[A-Z]{3}\d{4}$/.test(placa)) {
+    console.log("\x1b[31m❌ Placa inválida.\x1b[0m")
+    return false;
+  }
+  return true;
+}
+
+function checkCpf(cpf: string): boolean {
+  if (!/^\d{11}$/.test(cpf)) {
+    console.log("\x1b[31m❌ CPF inválido.\x1b[0m");
+    return false;
+  }
+  return true;
+}
+
 function cadastrarVeiculo() {
   let placa: string = readlineSync.question("Digite a placa: (ex: AAA1234) ");
+  if (!checkPlaca(placa)) {
+    main();
+  }
   let modelo: string = readlineSync.question("Digite o modelo: (ex: Sedan) ");
   let marca: string = readlineSync.question("Digite a marca: (ex: Fiat) ");
   let valorHoraAluguel: number = parseInt(readlineSync.question("Digite o valor da hora de aluguel: "));
   let carteiraNecessaria: string = readlineSync.question("Digite a habilitação necessária para conduzir o veículo, se A ou B: ");
   
-  const veiculo = new Veiculo(
-    placa.toUpperCase(),
-    modelo,
-    marca,
-    valorHoraAluguel,
-    true,
-    carteiraNecessaria.toUpperCase()
-  );
-  locadora.cadastrarVeiculo(veiculo);
-  console.log(`\x1b[32mVeículo cadastrado com sucesso: ${modelo} - ${placa}\x1b[0m`);
-  main();
+  carteiraNecessaria = carteiraNecessaria.toUpperCase();
+  if (carteiraNecessaria !== "A" && carteiraNecessaria !== "B") {
+    console.log("\x1b[31m❌ Carteira necessária inválida.\x1b[0m");
+    main();
+  }
+  
+  if (placa && modelo && marca && valorHoraAluguel && carteiraNecessaria) {
+    const veiculo = new Veiculo(
+      placa.toUpperCase(),
+      modelo,
+      marca,
+      valorHoraAluguel,
+      true,
+      carteiraNecessaria
+    );
+    locadora.cadastrarVeiculo(veiculo);
+    console.log(`\x1b[32mVeículo cadastrado com sucesso: ${modelo} - ${placa}\x1b[0m`);
+    main();
+  } else {
+    console.log("\x1b[31m❌ Informações inválidas.\x1b[0m");
+    main();
+  }
 }
 
 function listarVeiculosDisponiveis() {
@@ -91,29 +121,42 @@ function listarVeiculosDisponiveis() {
 
 function alugarVeiculo() {
   let placa: string = readlineSync.question("Digite a placa: ");
-  let cpfCliente: string = readlineSync.question("Digite o CPF do cliente: ");
-  let qtdDiasContratados: string = readlineSync.question("Digite a quantidade de dias que deseja alugar: ");
-
-  const cliente = locadora.buscarCliente(cpfCliente);
-
-  if (cliente) {
-    locadora.alugarVeiculo(placa.toUpperCase(), cliente.cpf);
-
-  } else {
-    console.log("\x1b[31mCliente com o CPF " + cpfCliente + " não encontrado.\x1b[0m");
+  if (!checkPlaca(placa)) {
+    main();
   }
-
+  let cpfCliente: string = readlineSync.question("Digite o CPF do cliente: ");
+  if (!checkCpf(cpfCliente)) {
+    main();
+  }
+  let qtdDiasContratados: string = readlineSync.question("Digite a quantidade de dias que deseja alugar: ");
+  
+  locadora.alugarVeiculo(placa.toUpperCase(), cpfCliente);
   main();
 }
 
 function cadastrarCliente() {
   let nome: string = readlineSync.question("Digite o nome do cliente: ");
-  let cpf: string = readlineSync.question("Digite o CPF do cliente: ");
-  let tipoCarteira: string = readlineSync.question("Digite a categoria da carteira do cliente: ");
+  if (nome.length < 3) {
+    console.log("\x1b[31m❌ Nome inválido.\x1b[0m");
+    main();
+  }
 
-  const cliente = new Cliente(nome, cpf, tipoCarteira.toUpperCase());
-  locadora.cadastrarCliente(cliente);
-  main();
+  let cpf: string = readlineSync.question("Digite o CPF do cliente: ");
+  if (!checkCpf(cpf)) {
+    main();
+  }
+
+  let tipoCarteira: string = readlineSync.question("Digite a categoria da carteira do cliente: ");
+  if(tipoCarteira.toUpperCase() !== "A" && tipoCarteira.toUpperCase() !== "B") {
+    console.log("\x1b[31m❌ Carteira inválida.\x1b[0m");
+    main();
+  }
+
+  if (nome && cpf && tipoCarteira) {
+    const cliente = new Cliente(nome, cpf, tipoCarteira.toUpperCase());
+    locadora.cadastrarCliente(cliente);
+    main();
+  }
 }
 
 function devolverVeiculo() {

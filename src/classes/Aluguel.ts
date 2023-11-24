@@ -41,7 +41,7 @@ class Aluguel {
         }
         const diferencaEmHoras = Math.abs(this._dataFim.getTime() - this._dataInicio.getTime()) / 36e5;
         if (diferencaEmHoras < 24) {
-            return this._valorHoraContratado;
+            return this._valorHoraContratado * 24;
         }
         const valorFinal = diferencaEmHoras * this._valorHoraContratado;
 
@@ -54,6 +54,7 @@ class Aluguel {
         }
         const dataInicio = this._dataInicio.getDate() + "/" + (this._dataInicio.getMonth() + 1) + "/" + this._dataInicio.getFullYear();
         const dataFim = this._dataFim.getDate() + "/" + (this._dataFim.getMonth() + 1) + "/" + this._dataFim.getFullYear();
+        const horasUtilizadas = Math.abs(this._dataFim.getTime() - this._dataInicio.getTime()) / 36e5;
         const valorTotal = this.calcularValorFinal();
 
         return `
@@ -61,9 +62,10 @@ class Aluguel {
             Veiículo: ${this._veiculo.modelo}
             Data de início: ${dataInicio}
             Data de fim: ${dataFim}
-            Valor da hora: ${this._valorHoraContratado}
-            Horas Utilizadas: ${Math.abs(this._dataFim.getTime() - this._dataInicio.getTime()) / 36e5}
-            Valor total: ${valorTotal}
+            Valor da hora: ${this._valorHoraContratado}R$
+            Horas Utilizadas: ${horasUtilizadas < 1 ? '1' : horasUtilizadas.toFixed(2)}
+            ${horasUtilizadas < 24 ? '\x1b[3mValor mínimo de uma diária cobrado\x1b[0m' : ''}
+            Valor total: ${valorTotal}R$
         `;
     }
 

@@ -69,7 +69,16 @@ class Locadora {
 
   alugarVeiculo(placa: string, cpf: string): void {
     const veiculoAlugar = this.buscarVeiculo(placa);
+    if (!veiculoAlugar) {
+      console.log("\x1b[31m❌ Veículo não encontrado.\x1b[0m");
+      return;
+    }
+
     const clienteAlugar = this.buscarCliente(cpf);
+    if (!clienteAlugar) {
+      console.log("\x1b[31m❌ Cliente não encontrado.\x1b[0m");
+      return;
+    }
 
     if (veiculoAlugar && clienteAlugar){
       if (veiculoAlugar.disponivel && 
@@ -84,15 +93,11 @@ class Locadora {
         console.log(`\x1b[31m❌ Cliente ${clienteAlugar.nome} já está alugando um veículo.\x1b[0m`);
       } else if (clienteAlugar.tipoCarteira !== veiculoAlugar.carteiraNecessaria) {
         console.log(`\x1b[31m❌ Veículo ${veiculoAlugar.modelo} requer uma carteira do tipo ${veiculoAlugar.carteiraNecessaria}.\x1b[0m`);
-      } else if (!veiculoAlugar) {
-        console.log("\x1b[31m❌ Veículo não encontrado.\x1b[0m");
-      } else if (!clienteAlugar) {
-        console.log("\x1b[31m❌ Cliente não encontrado.\x1b[0m");
-      }
-       else {
+      } else {
         console.log(`\x1b[31m❌ Veículo ${veiculoAlugar.modelo} não está disponível para aluguel para este cliente.\x1b[0m`);
       } 
-  }}
+    }
+  }
 
   calcularValorDoAluguel(veiculoAlugado: Veiculo, qtdDiasContratados: number): number {
     const valorDoAluguelPorDia = veiculoAlugado.valorHoraAluguel * 24
