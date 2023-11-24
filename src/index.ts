@@ -141,7 +141,7 @@ function cadastrarCliente() {
     main();
   }
 
-  let cpf: string = readlineSync.question("Digite o CPF do cliente: ");
+  let cpf: string = readlineSync.question("Digite o CPF do cliente (XXXYYYZZZYY) sem pontuação: ");
   if (!checkCpf(cpf)) {
     main();
   }
