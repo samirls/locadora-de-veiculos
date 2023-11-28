@@ -10,8 +10,9 @@
 <h4>Professores</h4>
 <p>Dannyel Kayke</p>
 <p>Rafael Costa</p>
+</hr>
 
-Desenvolvimento de Sistema para Locadora de Veículos
+<h3>Desenvolvimento de Sistema para Locadora de Veículos</h3>
 
 Contexto e Requisitos
 
